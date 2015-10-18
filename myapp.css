@@ -109,6 +109,7 @@ header .hide-completed {
 }
 
 .toggle-private {
+  float:right;
   margin-left: 5px;
 }
 

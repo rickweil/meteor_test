@@ -13,7 +13,6 @@
         </label>
       
       <span style="float:right">{{> loginButtons}}</span>
-
      {{#if currentUser}}      
       <form class="new-task">
         <input type="text" name="text" placeholder="Type to add new tasks" />
@@ -22,8 +21,7 @@
     </header>
 
     <form>
-      <span style="font-size: 8px;">&nbsp;&nbsp;&nbsp;Done &nbsp;&nbsp; Mine</span>
-      <br> &nbsp; &nbsp; ({{incompleteCount}})   ({{myTaskCount}})  
+       &nbsp; &nbsp; ({{incompleteCount}})
       <ul>
         {{#each tasks}}
         {{> task}}
@@ -37,19 +35,18 @@
   <li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}">
     <button class="delete">&times;</button>
     <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
-    <input type="checkbox" checked="{{my_tasks}}" class="my_tasks" />
- 
+     <span style="float:right">&nbsp;&nbsp;{{username}}</span>
     {{#if isOwner}}
       <button class="toggle-private">
         {{#if private}}
           Private
         {{else}}
-          Public
+          Public&nbsp;
         {{/if}}
       </button>
     {{/if}}
 
-    <span class="text">{{text}}</span>
-    <span style="float:right">{{username}}</span>
+    <span class="text">{{{text}}}</span>
+
   </li>
 </template>

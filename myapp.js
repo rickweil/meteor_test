@@ -12,6 +12,7 @@ if (Meteor.isServer) {
   });
 }
 
+
 if (Meteor.isClient) {
   // This code only runs on the client
   Meteor.subscribe("tasks");
@@ -29,9 +30,6 @@ if (Meteor.isClient) {
     },
     hideCompleted: function () {
       return Session.get("hideCompleted");
-    },
-    myTaskCount: function () {
-      return Tasks.find({my_tasks: {$ne: false}}).count();
     },
     incompleteCount: function () {
       return Tasks.find({checked: {$ne: true}}).count();
@@ -68,10 +66,6 @@ if (Meteor.isClient) {
       // Set the checked property to the opposite of its current value
      Meteor.call("setChecked", this._id, ! this.checked);
     },
-    "click .my_tasks": function () {
-      // Set the checked property to the opposite of its current value
-        Meteor.call("setMyTasks", this._id, ! this.my_tasks);
-    },
     "click .delete": function () {
       Meteor.call("deleteTask", this._id);
     },
@@ -97,20 +91,21 @@ Meteor.methods({
     Tasks.insert({
       text: text,
       checked: false,
-      my_tasks: true,
       createdAt: new Date(),
       owner: Meteor.userId(),
       username: username
     });
   },
   deleteTask: function (taskId) {
-    Tasks.remove(taskId);
+    var task = Tasks.findOne(taskId);
+    if ( Meteor.userId() == task.owner || !task.private) {
+      Tasks.remove(taskId);
+    }
+    return;
+    //throw new Meteor.Error("not-authorized");
   },
   setChecked: function (taskId, setChecked) {
     Tasks.update(taskId, { $set: { checked: setChecked} });
-  },
-  setMyTasks: function (taskId, setMyTasks) {
-    Tasks.update(taskId, { $set: { my_tasks: setMyTasks} });
   },
   setPrivate: function (taskId, setToPrivate) {
     var task = Tasks.findOne(taskId);
